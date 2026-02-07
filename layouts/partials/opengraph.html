@@ -10,12 +10,11 @@ default (index site.Data site.Language.Lang).site.description }}
 <meta property="og:type" content="{{ $type }}" />
 <meta property="og:description" content="{{ $description }}" />
 {{- with .Params.images -}}
-{{- range first 6 . }}
-<meta property="og:image" content="{{ . | absURL }}">
-{{ end -}}
+  <meta property="og:image" content="{{ index . 0 | absURL }}">
 {{- else -}}
-{{- with .Site.Params.images }}
-<meta property="og:image" content="{{ index . 0 | absURL }}">
-{{ end -}}
+  {{- $image := (index site.Data site.Language.Lang).site.openGraph.image | default (index site.Data site.Language.Lang).author.image }}
+  {{- with $image }}
+    <meta property="og:image" content="{{ . | absURL }}">
+  {{ end -}}
 {{- end -}}
 <meta property="og:url" content="{{ $url }}">
