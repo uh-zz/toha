@@ -3,8 +3,7 @@
 {{ $type := .Params.type | default (index site.Data site.Language.Lang).site.openGraph.type | default "website" }}
 {{ $description := .Params.description | default (index site.Data site.Language.Lang).site.openGraph.description |
 default (index site.Data site.Language.Lang).site.description }}
-{{ $image := .Params.image | default (index site.Data site.Language.Lang).site.openGraph.image | default (index
-site.Data site.Language.Lang).author.image }}
+{{ $image := (index .Params.images 0) | default (index site.Data site.Language.Lang).site.openGraph.image | default (index site.Data site.Language.Lang).author.image }}
 {{ $url := .Permalink | default (index site.Data site.Language.Lang).site.openGraph.url | default site.BaseURL }}
 
 <!-- ============ open graph tags ========== -->
