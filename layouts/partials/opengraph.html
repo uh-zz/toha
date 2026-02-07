@@ -3,12 +3,24 @@
 {{ $type := .Params.type | default (index site.Data site.Language.Lang).site.openGraph.type | default "website" }}
 {{ $description := .Params.description | default (index site.Data site.Language.Lang).site.openGraph.description |
 default (index site.Data site.Language.Lang).site.description }}
-{{ $image := (index .Params.images 0) | default (index site.Data site.Language.Lang).site.openGraph.image | default (index site.Data site.Language.Lang).author.image }}
 {{ $url := .Permalink | default (index site.Data site.Language.Lang).site.openGraph.url | default site.BaseURL }}
 
 <!-- ============ open graph tags ========== -->
 <meta property="og:title" content="{{ $title }}" />
 <meta property="og:type" content="{{ $type }}" />
 <meta property="og:description" content="{{ $description }}" />
-<meta property="og:image" content="{{ $image | relURL }}">
+{{- with .Params.images -}}
+{{- range first 6 . }}
+<meta property="og:image" content="{{ . | absURL }}">
+{{ end -}}
+{{- else -}}
+{{- $featured := partial "opengraph/get-featured-image.html" . }}
+{{- with $featured -}}
+<meta property="og:image" content="{{ $featured.Permalink }}">
+{{- else -}}
+{{- with .Site.Params.images }}
+<meta property="og:image" content="{{ index . 0 | absURL }}">
+{{ end -}}
+{{- end -}}
+{{- end -}}
 <meta property="og:url" content="{{ $url }}">
